@@ -6,10 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const prisma = new PrismaClient();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log('got')
     const {method} = req;
-
-    console.log('a')
 
     switch (method) {
         case "POST":
@@ -25,9 +22,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 }
             } catch (error) {
                 res.status(500).json({error: error.message});
+                break
             }
 
-            console.log('created')
             res.status(200).json({message: "Chat rooms created"});
             break;
         default:
