@@ -2,7 +2,7 @@
 import {useEffect, useState} from "react";
 import Link from "next/link";
 
-const Id = () => {
+const Index = () => {
     const [chatRooms, setChatRooms] = useState([]);
 
     const makeChatRooms = () => {
@@ -58,4 +58,4 @@ const Id = () => {
     );
 }
 
-export default Id;
+export default Index;

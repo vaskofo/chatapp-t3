@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 const { v4: uuidv4 } = require('uuid');
 const id = uuidv4();
+import { useRouter } from 'next/router';
+
 const IndexPage = () => {
+    const router = useRouter();
+    const roomId = router.query.id?.toString() ?? '';
+    console.log(roomId)
     //Connect to 'ws://localhost:3001' and on button press, make server send random number to all clients
     const [socket, setSocket] = useState<WebSocket | null>(null);
     const [message, setMessage] = useState<string>('');
@@ -12,15 +17,21 @@ const IndexPage = () => {
         if (socket) {
             socket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                setMessages((messages) => [...messages, data]);
+                setMessages((messages) => [data, ...messages]);
             };
         }
     }, [socket]);
 
-    const connect = () => {
+    const connect = (roomId: string) => {
+        console.log(roomId, 'connect')
         //Get current host
         let host = window.location.host.split(':')[0];
-        const newSocket = new WebSocket(`ws://${host}:3001`);
+        //Connect to websocket and send the current roomId
+        if(! roomId) {
+            return;
+        }
+        const newSocket = new WebSocket(`ws://${host}:3001?roomId=${roomId?.toString()}`);
+
         newSocket.onopen = () => {
             setConnected(true);
         };
@@ -43,16 +54,15 @@ const IndexPage = () => {
 
     //after render connect to websocket
     useEffect(() => {
-        connect();
-    }, []);
+        if (roomId) {
+            connect(roomId);
+        }
+    }, [roomId]);
 
     return (
         <div className="flex flex-col justify-center items-center">
             <div>
                 <h1>Websocket Test</h1>
-                {/*<button className={'btn'} onClick={connect}>Connect</button>*/}
-                {/*<br/>*/}
-                {/*<button onClick={disconnect}>Disconnect</button>*/}
                 <div>
                     <input
                         className={'bg-gray-200 rounded-lg mr-2'}
@@ -69,7 +79,7 @@ const IndexPage = () => {
                     Message: <br/>
                     {messages.map((data, index) => (
                         <div key={index}
-                             className={'bg-gray-200 rounded-lg p-2 mt-2'}
+                             className={'border-2 border-black rounded-lg p-2 mt-2'}
                         >
                             <span>{data.id}</span><br/>
                             {data.message}

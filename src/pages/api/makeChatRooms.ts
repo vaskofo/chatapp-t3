@@ -1,23 +1,34 @@
 //Create chat rooms and store them in the database sqlite
-import { NextApiRequest, NextApiResponse } from "next";
-import {prisma} from "~/server/db";
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { method } = req;
+import {NextApiRequest, NextApiResponse} from "next";
+import {PrismaClient, Prisma} from "@prisma/client";
+import {NextResponse} from "next/server";
+const { v4: uuidv4 } = require('uuid');
+const prisma = new PrismaClient();
 
-  switch (method) {
-    case "POST":
-      try {
-        const { chatRooms } = req.body;
-        const newChatRooms = await prisma.chatRoom.createMany({
-          data: chatRooms,
-        });
-        res.status(200).json(newChatRooms);
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
-      break;
-    default:
-      res.setHeader("Allow", ["POST"]);
-      res.status(405).end(`Method ${method} Not Allowed`);
-  }
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    console.log('got')
+    const {method} = req;
+
+    console.log('a')
+
+    switch (method) {
+        case "POST":
+            try {
+                for (let i = 0; i < 3; i++) {
+                    await prisma.chatRoom.create({
+                        data: {
+                            id: uuidv4(),
+                            name: "Room " + Math.floor(Math.random() * 1000),
+                        },
+                    });
+                }
+            } catch (error) {
+                res.status(500).json({error: error.message});
+            }
+
+            console.log('created')
+            res.status(200).json({message: "Chat rooms created"});
+        default:
+            res.status(200).json(await prisma.chatRoom.findMany());
+    }
 };
