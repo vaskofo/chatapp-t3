@@ -14,7 +14,7 @@ const Index = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({}),
-        }).then(r => console.log(r))
+        }).then(r => getChatRooms())
     }
 
     const getChatRooms = () => {

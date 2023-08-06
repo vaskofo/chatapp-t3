@@ -14,12 +14,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case "POST":
             try {
+                const initCount = await prisma.chatRoom.count();
                 for (let i = 0; i < 3; i++) {
                     await prisma.chatRoom.create({
                         data: {
                             id: uuidv4(),
-                            name: "Room " + Math.floor(Math.random() * 1000),
-                        },
+                            name: `Chat Room ${i + 1 + initCount}`,
+                        }
                     });
                 }
             } catch (error) {

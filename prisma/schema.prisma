@@ -65,14 +65,14 @@ model Message {
   content   String
   authorId  String
   roomId    String
-  room      chatRoom @relation(fields: [roomId], references: [id])
+  room      ChatRoom @relation(fields: [roomId], references: [id])
   author    User     @relation(fields: [authorId], references: [id])
 }
 
-model chatRoom {
+model ChatRoom {
   id        String    @id
   createdAt DateTime  @default(now())
-  updatedAt DateTime
+  updatedAt DateTime  @default(now())
   name      String
   messages  Message[]
 }
