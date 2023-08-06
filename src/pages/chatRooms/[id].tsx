@@ -61,7 +61,7 @@ const IndexPage = () => {
         }
 
         let newSocket = null;
-        if (window.location.protocol === 'https:') {
+        if (window.location.protocol === 'http:') {
             newSocket = new WebSocket(`ws://localhost:3001/?roomId=${roomId?.toString()}&id=${id}&name=${name}`);
         } else {
             newSocket = new WebSocket(`wss://chatapp-t3.sofiaconstantino.com/:3001/?roomId=${roomId?.toString()}&id=${id}&name=${name}`);
