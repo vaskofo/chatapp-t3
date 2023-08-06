@@ -29,6 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
             console.log('created')
             res.status(200).json({message: "Chat rooms created"});
+            break;
         default:
             res.status(200).json(await prisma.chatRoom.findMany());
     }
