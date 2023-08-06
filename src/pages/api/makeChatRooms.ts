@@ -1,5 +1,5 @@
 //Create chat rooms and store them in the database sqlite
-import {NextApiRequest, NextApiResponse} from "next";
+import {type NextApiRequest, type NextApiResponse} from "next";
 import {PrismaClient, Prisma} from "@prisma/client";
 import {NextResponse} from "next/server";
 const { v4: uuidv4 } = require('uuid');
@@ -11,8 +11,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case "POST":
             try {
+                // await prisma.chatRoom.deleteMany();
                 const initCount = await prisma.chatRoom.count();
-                for (let i = 0; i < 3; i++) {
+                for (let i = 0; i < 1; i++) {
                     await prisma.chatRoom.create({
                         data: {
                             id: uuidv4(),

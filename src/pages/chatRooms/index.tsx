@@ -1,8 +1,9 @@
 //get all chatRooms from db and show a button that will call makechatRooms to create them
 import {useEffect, useState} from "react";
 import Link from "next/link";
-
+import {useRouter} from "next/router";
 const Index = () => {
+    const router = useRouter();
     const [chatRooms, setChatRooms] = useState([]);
 
     const makeChatRooms = () => {
@@ -31,6 +32,11 @@ const Index = () => {
     }
 
     useEffect(() => {
+        if(! localStorage.getItem('name')){
+            router.push('/');
+            return;
+        }
+
         getChatRooms()
     }, [])
 
@@ -38,7 +44,7 @@ const Index = () => {
         <div className="flex flex-col justify-center items-center">
             <div>
                 <h1>Chat Rooms</h1>
-                <button className={'btn'} onClick={makeChatRooms}>Make Chat Rooms</button>
+                {/*<button className={'btn'} onClick={makeChatRooms}>Make Chat Rooms</button>*/}
                 <br/>
                 <div className={'flex flex-col gap-2'}>
                     {chatRooms.map((chatRoom, index) => (
