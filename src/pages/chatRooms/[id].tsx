@@ -30,7 +30,13 @@ const IndexPage = () => {
         if(! roomId) {
             return;
         }
-        const newSocket = new WebSocket(`ws://${host}:3001?roomId=${roomId?.toString()}`);
+        let prefix = 'ws://';
+
+        if (window.location.protocol === 'https:') {
+            prefix = 'wss://';
+        }
+
+        const newSocket = new WebSocket(`wss://chatapp-t3.sofiaconstantino.com/:3001?roomId=${roomId?.toString()}`);
 
         newSocket.onopen = () => {
             setConnected(true);
